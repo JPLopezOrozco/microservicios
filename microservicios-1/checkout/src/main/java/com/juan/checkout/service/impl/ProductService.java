@@ -22,14 +22,15 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    @CircuitBreaker(name = "product", fallbackMethod = "getProductFallbackMethod")
+    @CircuitBreaker(name = "productService", fallbackMethod = "fallbackProduct")
     public Product getProduct(String id) {
         log.info("Intentando Obtener el producto con ID : "+  id);
         return feignProductRepository.getProductById(id,true);
     }
 
-    public Product getProductFallbackMethod(String id,CallNotPermittedException exception ) {
-        log.error("Circuit breaker en estado Open");
+    public Product fallbackProduct(String id, CallNotPermittedException exception) {
+        log.error("Circuit Breaker");
         return new Product();
     }
+
 }
